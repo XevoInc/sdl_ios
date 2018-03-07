@@ -19,6 +19,9 @@ NS_ASSUME_NONNULL_BEGIN
 @property (nullable, nonatomic, strong) id<SDLSecurityType> securityManager;
 @property (nonatomic, copy) NSString *appId;
 
+// Additional setup
+- (BOOL)storeHeader:(SDLProtocolHeader *)header forServiceType:(SDLServiceType)serviceType;
+
 // Sending
 - (void)startServiceWithType:(SDLServiceType)serviceType payload:(nullable NSData *)payload;
 - (void)startSecureServiceWithType:(SDLServiceType)serviceType payload:(nullable NSData *)payload completionHandler:(void (^)(BOOL success, NSError *error))completionHandler;

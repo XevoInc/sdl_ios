@@ -17,6 +17,11 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 // Implement in subclasses.
+- (BOOL)storeHeader:(SDLProtocolHeader *)header forServiceType:(SDLServiceType)serviceType {
+    [self doesNotRecognizeSelector:_cmd];
+    return NO;
+}
+
 - (void)startServiceWithType:(SDLServiceType)serviceType payload:(nullable NSData *)payload {
     [self doesNotRecognizeSelector:_cmd];
 }

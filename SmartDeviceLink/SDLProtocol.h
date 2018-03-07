@@ -16,6 +16,9 @@ extern NSString *const SDLProtocolSecurityErrorDomain;
 
 @interface SDLProtocol : SDLAbstractProtocol <SDLProtocolListener>
 
+// Additional setup
+- (BOOL)storeHeader:(SDLProtocolHeader *)header forServiceType:(SDLServiceType)serviceType;
+
 // Sending
 - (void)startServiceWithType:(SDLServiceType)serviceType payload:(nullable NSData *)payload;
 - (void)startSecureServiceWithType:(SDLServiceType)serviceType payload:(nullable NSData *)payload completionHandler:(void (^)(BOOL success, NSError *error))completionHandler;

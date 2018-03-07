@@ -73,6 +73,17 @@ NS_ASSUME_NONNULL_BEGIN
 
 
 #pragma mark - Service metadata
+// used to initialize Session ID before starting this protocol
+- (BOOL)storeHeader:(SDLProtocolHeader *)header forServiceType:(SDLServiceType)serviceType {
+    if (header == nil) {
+        return NO;
+    }
+
+    SDLLogD(@"Storing SessionID %i of serviceType %i", header.sessionID, serviceType);
+    self.serviceHeaders[@(serviceType)] = [header copy];
+    return YES;
+}
+
 - (UInt8)sdl_retrieveSessionIDforServiceType:(SDLServiceType)serviceType {
     SDLProtocolHeader *header = self.serviceHeaders[@(serviceType)];
     if (header == nil) {
