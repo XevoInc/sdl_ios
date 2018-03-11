@@ -27,6 +27,7 @@ typedef NS_ENUM(UInt8, SDLFrameInfo) {
     SDLFrameInfoEndService = 0x04,
     SDLFrameInfoEndServiceACK = 0x05,
     SDLFrameInfoEndServiceNACK = 0x06,
+    SDLFrameInfoTransportEventUpdate = 0xFD,
     SDLFrameInfoServiceDataAck = 0xFE,
     SDLFrameInfoHeartbeatACK = 0xFF,
     // If frameType == Single (0x01)
