@@ -27,6 +27,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)startSecureServiceWithType:(SDLServiceType)serviceType payload:(nullable NSData *)payload completionHandler:(void (^)(BOOL success, NSError *error))completionHandler;
 - (void)endServiceWithType:(SDLServiceType)serviceType;
 
+- (void)registerSecondaryTransport:(nullable NSData *)payload;
+
 - (void)sendRPC:(SDLRPCMessage *)message;
 - (BOOL)sendRPC:(SDLRPCMessage *)message encrypted:(BOOL)encryption error:(NSError **)error;
 

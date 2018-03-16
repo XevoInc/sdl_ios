@@ -15,6 +15,8 @@ NS_ASSUME_NONNULL_BEGIN
 - (void)handleProtocolStartServiceNAKMessage:(SDLProtocolMessage *)startServiceNAK;
 - (void)handleProtocolEndServiceACKMessage:(SDLProtocolMessage *)endServiceACK;
 - (void)handleProtocolEndServiceNAKMessage:(SDLProtocolMessage *)endServiceNAK;
+- (void)handleProtocolRegisterSecondaryTransportACKMessage:(SDLProtocolMessage *)registerSecondaryTransportACK;
+- (void)handleProtocolRegisterSecondaryTransportNAKMessage:(SDLProtocolMessage *)registerSecondaryTransportNAK;
 - (void)handleTransportEventUpdateMessage:(SDLProtocolMessage *)transportEventUpdate;
 
 // Older protocol handlers

@@ -34,6 +34,10 @@ NS_ASSUME_NONNULL_BEGIN
     [self doesNotRecognizeSelector:_cmd];
 }
 
+- (void)registerSecondaryTransport:(nullable NSData *)payload {
+    [self doesNotRecognizeSelector:_cmd];
+}
+
 - (void)sendRPC:(SDLRPCMessage *)message {
     [self doesNotRecognizeSelector:_cmd];
 }

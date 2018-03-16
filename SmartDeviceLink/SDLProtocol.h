@@ -23,6 +23,7 @@ extern NSString *const SDLProtocolSecurityErrorDomain;
 - (void)startServiceWithType:(SDLServiceType)serviceType payload:(nullable NSData *)payload;
 - (void)startSecureServiceWithType:(SDLServiceType)serviceType payload:(nullable NSData *)payload completionHandler:(void (^)(BOOL success, NSError *error))completionHandler;
 - (void)endServiceWithType:(SDLServiceType)serviceType;
+- (void)registerSecondaryTransport:(nullable NSData *)payload;
 - (void)sendRPC:(SDLRPCMessage *)message;
 - (BOOL)sendRPC:(SDLRPCMessage *)message encrypted:(BOOL)encryption error:(NSError **)error;
 - (void)sendRawData:(NSData *)data withServiceType:(SDLServiceType)serviceType;
