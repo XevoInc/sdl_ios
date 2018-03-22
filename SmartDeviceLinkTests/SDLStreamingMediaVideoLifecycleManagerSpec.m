@@ -1,5 +1,5 @@
 //
-//  SDLStreamingMediaLifecycleManagerSpec.m
+//  SDLStreamingMediaVideoLifecycleManagerSpec.m
 //  SmartDeviceLink-iOS
 //
 
@@ -9,7 +9,6 @@
 
 #import "SDLCarWindowViewController.h"
 #import "SDLConnectionManagerType.h"
-#import "SDLControlFramePayloadAudioStartServiceAck.h"
 #import "SDLControlFramePayloadConstants.h"
 #import "SDLControlFramePayloadNak.h"
 #import "SDLControlFramePayloadVideoStartServiceAck.h"
@@ -31,7 +30,7 @@
 #import "SDLScreenParams.h"
 #import "SDLStateMachine.h"
 #import "SDLStreamingMediaConfiguration.h"
-#import "SDLStreamingMediaLifecycleManager.h"
+#import "SDLStreamingMediaVideoLifecycleManager.h"
 #import "SDLFakeStreamingManagerDataSource.h"
 #import "SDLSystemCapability.h"
 #import "SDLV2ProtocolHeader.h"
@@ -42,10 +41,10 @@
 #import "SDLVideoStreamingProtocol.h"
 #import "TestConnectionManager.h"
 
-QuickSpecBegin(SDLStreamingMediaLifecycleManagerSpec)
+QuickSpecBegin(SDLStreamingMediaVideoLifecycleManagerSpec)
 
 describe(@"the streaming media manager", ^{
-    __block SDLStreamingMediaLifecycleManager *streamingLifecycleManager = nil;
+    __block SDLStreamingMediaVideoLifecycleManager *streamingLifecycleManager = nil;
     __block SDLStreamingMediaConfiguration *testConfiguration = [SDLStreamingMediaConfiguration insecureConfiguration];
     __block SDLCarWindowViewController *testViewController = [[SDLCarWindowViewController alloc] init];
     __block SDLFakeStreamingManagerDataSource *testDataSource = [[SDLFakeStreamingManagerDataSource alloc] init];
@@ -69,24 +68,20 @@ describe(@"the streaming media manager", ^{
         testConfiguration.rootViewController = testViewController;
         someBackgroundTitleString = @"Open Test App";
         testConnectionManager = [[TestConnectionManager alloc] init];
-        streamingLifecycleManager = [[SDLStreamingMediaLifecycleManager alloc] initWithConnectionManager:testConnectionManager configuration:testConfiguration];
+        streamingLifecycleManager = [[SDLStreamingMediaVideoLifecycleManager alloc] initWithConnectionManager:testConnectionManager configuration:testConfiguration];
     });
 
     it(@"should initialize properties", ^{
         expect(streamingLifecycleManager.touchManager).toNot(beNil());
         expect(streamingLifecycleManager.focusableItemManager).toNot(beNil());
-        expect(streamingLifecycleManager.audioManager).toNot(beNil());
         expect(@(streamingLifecycleManager.isStreamingSupported)).to(equal(@NO));
         expect(@(streamingLifecycleManager.isVideoConnected)).to(equal(@NO));
-        expect(@(streamingLifecycleManager.isAudioConnected)).to(equal(@NO));
         expect(@(streamingLifecycleManager.isVideoEncrypted)).to(equal(@NO));
-        expect(@(streamingLifecycleManager.isAudioEncrypted)).to(equal(@NO));
         expect(@(streamingLifecycleManager.isVideoStreamingPaused)).to(equal(@YES));
         expect(@(CGSizeEqualToSize(streamingLifecycleManager.screenSize, CGSizeZero))).to(equal(@YES));
         expect(@(streamingLifecycleManager.pixelBufferPool == NULL)).to(equal(@YES));
         expect(@(streamingLifecycleManager.requestedEncryptionType)).to(equal(@(SDLStreamingEncryptionFlagNone)));
         expect(streamingLifecycleManager.currentAppState).to(equal(SDLAppStateActive));
-        expect(streamingLifecycleManager.currentAudioStreamState).to(equal(SDLAudioStreamStateStopped));
         expect(streamingLifecycleManager.currentVideoStreamState).to(equal(SDLVideoStreamStateStopped));
         expect(streamingLifecycleManager.videoFormat).to(beNil());
         expect(streamingLifecycleManager.dataSource).to(equal(testDataSource));
@@ -113,14 +108,11 @@ describe(@"the streaming media manager", ^{
         it(@"should be ready to stream", ^{
             expect(@(streamingLifecycleManager.isStreamingSupported)).to(equal(@NO));
             expect(@(streamingLifecycleManager.isVideoConnected)).to(equal(@NO));
-            expect(@(streamingLifecycleManager.isAudioConnected)).to(equal(@NO));
             expect(@(streamingLifecycleManager.isVideoEncrypted)).to(equal(@NO));
-            expect(@(streamingLifecycleManager.isAudioEncrypted)).to(equal(@NO));
             expect(@(streamingLifecycleManager.isVideoStreamingPaused)).to(equal(@YES));
             expect(@(CGSizeEqualToSize(streamingLifecycleManager.screenSize, CGSizeZero))).to(equal(@YES));
             expect(@(streamingLifecycleManager.pixelBufferPool == NULL)).to(equal(@YES));
             expect(streamingLifecycleManager.currentAppState).to(equal(SDLAppStateActive));
-            expect(streamingLifecycleManager.currentAudioStreamState).to(match(SDLAudioStreamStateStopped));
             expect(streamingLifecycleManager.currentVideoStreamState).to(match(SDLVideoStreamStateStopped));
         });
 
@@ -192,9 +184,8 @@ describe(@"the streaming media manager", ^{
                 [streamingLifecycleManager.appStateMachine setToState:SDLAppStateActive fromOldState:nil callEnterTransition:NO];
             });
 
-            describe(@"and both streams are open", ^{
+            describe(@"and video stream is open", ^{
                 beforeEach(^{
-                    [streamingLifecycleManager.audioStreamStateMachine setToState:SDLAudioStreamStateReady fromOldState:nil callEnterTransition:NO];
                     [streamingLifecycleManager.videoStreamStateMachine setToState:SDLVideoStreamStateReady fromOldState:nil callEnterTransition:NO];
                 });
 
@@ -209,8 +200,7 @@ describe(@"the streaming media manager", ^{
                                 sendNotificationForHMILevel(SDLHMILevelNone);
                             });
 
-                            it(@"should close both streams", ^{
-                                expect(streamingLifecycleManager.currentAudioStreamState).to(equal(SDLAudioStreamStateShuttingDown));
+                            it(@"should close video stream", ^{
                                 expect(streamingLifecycleManager.currentVideoStreamState).to(equal(SDLVideoStreamStateShuttingDown));
                             });
                         });
@@ -220,8 +210,7 @@ describe(@"the streaming media manager", ^{
                                 sendNotificationForHMILevel(SDLHMILevelBackground);
                             });
 
-                            it(@"should close both stream", ^{
-                                expect(streamingLifecycleManager.currentAudioStreamState).to(equal(SDLAudioStreamStateShuttingDown));
+                            it(@"should close video stream", ^{
                                 expect(streamingLifecycleManager.currentVideoStreamState).to(equal(SDLVideoStreamStateShuttingDown));
                             });
                         });
@@ -231,8 +220,7 @@ describe(@"the streaming media manager", ^{
                                 sendNotificationForHMILevel(SDLHMILevelLimited);
                             });
 
-                            it(@"should not close either stream", ^{
-                                expect(streamingLifecycleManager.currentAudioStreamState).to(equal(SDLAudioStreamStateReady));
+                            it(@"should not close video stream", ^{
                                 expect(streamingLifecycleManager.currentVideoStreamState).to(equal(SDLVideoStreamStateReady));
                             });
                         });
@@ -242,8 +230,7 @@ describe(@"the streaming media manager", ^{
                                 sendNotificationForHMILevel(SDLHMILevelFull);
                             });
 
-                            it(@"should not close either stream", ^{
-                                expect(streamingLifecycleManager.currentAudioStreamState).to(equal(SDLAudioStreamStateReady));
+                            it(@"should not close video stream", ^{
                                 expect(streamingLifecycleManager.currentVideoStreamState).to(equal(SDLVideoStreamStateReady));
                             });
                         });
@@ -258,7 +245,6 @@ describe(@"the streaming media manager", ^{
                             it(@"should shut down the video stream", ^{
                                 expect(@(streamingLifecycleManager.shouldRestartVideoStream)).to(beFalse());
 
-                            expect(streamingLifecycleManager.currentAudioStreamState).to(equal(SDLAudioStreamStateShuttingDown));
                             expect(streamingLifecycleManager.currentVideoStreamState).to(equal(SDLVideoStreamStateShuttingDown));
                             });
                         });
@@ -275,8 +261,7 @@ describe(@"the streaming media manager", ^{
                             sendNotificationForHMILevel(SDLHMILevelNone);
                         });
 
-                        it(@"should close both streams", ^{
-                            expect(streamingLifecycleManager.currentAudioStreamState).to(equal(SDLAudioStreamStateShuttingDown));
+                        it(@"should close video stream", ^{
                             expect(streamingLifecycleManager.currentVideoStreamState).to(equal(SDLVideoStreamStateShuttingDown));
                         });
                     });
@@ -286,8 +271,7 @@ describe(@"the streaming media manager", ^{
                             sendNotificationForHMILevel(SDLHMILevelBackground);
                         });
 
-                        it(@"should close both stream", ^{
-                            expect(streamingLifecycleManager.currentAudioStreamState).to(equal(SDLAudioStreamStateShuttingDown));
+                        it(@"should close video stream", ^{
                             expect(streamingLifecycleManager.currentVideoStreamState).to(equal(SDLVideoStreamStateShuttingDown));
                         });
                     });
@@ -297,8 +281,7 @@ describe(@"the streaming media manager", ^{
                             sendNotificationForHMILevel(SDLHMILevelLimited);
                         });
 
-                        it(@"should not close either stream", ^{
-                            expect(streamingLifecycleManager.currentAudioStreamState).to(equal(SDLAudioStreamStateReady));
+                        it(@"should not close video stream", ^{
                             expect(streamingLifecycleManager.currentVideoStreamState).to(equal(SDLVideoStreamStateReady));
                         });
                     });
@@ -308,17 +291,15 @@ describe(@"the streaming media manager", ^{
                             sendNotificationForHMILevel(SDLHMILevelFull);
                         });
 
-                        it(@"should not close either stream", ^{
-                            expect(streamingLifecycleManager.currentAudioStreamState).to(equal(SDLAudioStreamStateReady));
+                        it(@"should not close video stream", ^{
                             expect(streamingLifecycleManager.currentVideoStreamState).to(equal(SDLVideoStreamStateReady));
                         });
                     });
                 });
             });
 
-            describe(@"and both streams are closed", ^{
+            describe(@"and video stream is closed", ^{
                 beforeEach(^{
-                    [streamingLifecycleManager.audioStreamStateMachine setToState:SDLAudioStreamStateStopped fromOldState:nil callEnterTransition:NO];
                     [streamingLifecycleManager.videoStreamStateMachine setToState:SDLVideoStreamStateStopped fromOldState:nil callEnterTransition:NO];
                 });
 
@@ -332,8 +313,7 @@ describe(@"the streaming media manager", ^{
                             sendNotificationForHMILevel(SDLHMILevelNone);
                         });
 
-                        it(@"should not start either stream", ^{
-                            expect(streamingLifecycleManager.currentAudioStreamState).to(equal(SDLAudioStreamStateStopped));
+                        it(@"should not start video stream", ^{
                             expect(streamingLifecycleManager.currentVideoStreamState).to(equal(SDLVideoStreamStateStopped));
                         });
                     });
@@ -343,8 +323,7 @@ describe(@"the streaming media manager", ^{
                             sendNotificationForHMILevel(SDLHMILevelBackground);
                         });
 
-                        it(@"should not start either stream", ^{
-                            expect(streamingLifecycleManager.currentAudioStreamState).to(equal(SDLAudioStreamStateStopped));
+                        it(@"should not start video stream", ^{
                             expect(streamingLifecycleManager.currentVideoStreamState).to(equal(SDLVideoStreamStateStopped));
                         });
                     });
@@ -354,8 +333,7 @@ describe(@"the streaming media manager", ^{
                             sendNotificationForHMILevel(SDLHMILevelLimited);
                         });
 
-                        it(@"should start both streams", ^{
-                            expect(streamingLifecycleManager.currentAudioStreamState).to(equal(SDLAudioStreamStateStarting));
+                        it(@"should start video stream", ^{
                             expect(streamingLifecycleManager.currentVideoStreamState).to(equal(SDLVideoStreamStateStarting));
                         });
                     });
@@ -365,8 +343,7 @@ describe(@"the streaming media manager", ^{
                             sendNotificationForHMILevel(SDLHMILevelFull);
                         });
 
-                        it(@"should start both streams", ^{
-                            expect(streamingLifecycleManager.currentAudioStreamState).to(equal(SDLAudioStreamStateStarting));
+                        it(@"should start video stream", ^{
                             expect(streamingLifecycleManager.currentVideoStreamState).to(equal(SDLVideoStreamStateStarting));
                         });
                     });
@@ -586,99 +563,6 @@ describe(@"the streaming media manager", ^{
 
                 it(@"should have set all the right properties", ^{
                     expect(streamingLifecycleManager.currentVideoStreamState).to(equal(SDLVideoStreamStateStopped));
-                });
-            });
-
-            describe(@"after receiving an Audio Start ACK", ^{
-                __block SDLProtocolHeader *testAudioHeader = nil;
-                __block SDLProtocolMessage *testAudioMessage = nil;
-                __block SDLControlFramePayloadAudioStartServiceAck *testAudioStartServicePayload = nil;
-                __block int64_t testMTU = 786579;
-
-                beforeEach(^{
-                    [streamingLifecycleManager.audioStreamStateMachine setToState:SDLAudioStreamStateStarting fromOldState:nil callEnterTransition:NO];
-
-                    testAudioHeader = [[SDLV2ProtocolHeader alloc] initWithVersion:5];
-                    testAudioHeader.frameType = SDLFrameTypeSingle;
-                    testAudioHeader.frameData = SDLFrameInfoStartServiceACK;
-                    testAudioHeader.encrypted = YES;
-                    testAudioHeader.serviceType = SDLServiceTypeAudio;
-
-                    testAudioStartServicePayload = [[SDLControlFramePayloadAudioStartServiceAck alloc] initWithMTU:testMTU];
-                    testAudioMessage = [[SDLV2ProtocolMessage alloc] initWithHeader:testAudioHeader andPayload:testAudioStartServicePayload.data];
-                    [streamingLifecycleManager handleProtocolStartServiceACKMessage:testAudioMessage];
-                });
-
-                it(@"should have set all the right properties", ^{
-                    expect([[SDLGlobals sharedGlobals] mtuSizeForServiceType:SDLServiceTypeAudio]).to(equal(testMTU));
-                    expect(streamingLifecycleManager.audioEncrypted).to(equal(YES));
-                    expect(streamingLifecycleManager.currentAudioStreamState).to(equal(SDLAudioStreamStateReady));
-                });
-            });
-
-            describe(@"after receiving an Audio Start NAK", ^{
-                __block SDLProtocolHeader *testAudioHeader = nil;
-                __block SDLProtocolMessage *testAudioMessage = nil;
-
-                beforeEach(^{
-                    [streamingLifecycleManager.videoStreamStateMachine setToState:SDLAudioStreamStateStarting fromOldState:nil callEnterTransition:NO];
-
-                    testAudioHeader = [[SDLV2ProtocolHeader alloc] initWithVersion:5];
-                    testAudioHeader.frameType = SDLFrameTypeSingle;
-                    testAudioHeader.frameData = SDLFrameInfoStartServiceNACK;
-                    testAudioHeader.encrypted = NO;
-                    testAudioHeader.serviceType = SDLServiceTypeAudio;
-
-                    testAudioMessage = [[SDLV2ProtocolMessage alloc] initWithHeader:testAudioHeader andPayload:nil];
-                    [streamingLifecycleManager handleProtocolEndServiceACKMessage:testAudioMessage];
-                });
-
-                it(@"should have set all the right properties", ^{
-                    expect(streamingLifecycleManager.currentAudioStreamState).to(equal(SDLAudioStreamStateStopped));
-                });
-            });
-
-            describe(@"after receiving a audio end ACK", ^{
-                __block SDLProtocolHeader *testAudioHeader = nil;
-                __block SDLProtocolMessage *testAudioMessage = nil;
-
-                beforeEach(^{
-                    [streamingLifecycleManager.videoStreamStateMachine setToState:SDLAudioStreamStateStarting fromOldState:nil callEnterTransition:NO];
-
-                    testAudioHeader = [[SDLV2ProtocolHeader alloc] initWithVersion:5];
-                    testAudioHeader.frameType = SDLFrameTypeSingle;
-                    testAudioHeader.frameData = SDLFrameInfoEndServiceACK;
-                    testAudioHeader.encrypted = NO;
-                    testAudioHeader.serviceType = SDLServiceTypeAudio;
-
-                    testAudioMessage = [[SDLV2ProtocolMessage alloc] initWithHeader:testAudioHeader andPayload:nil];
-                    [streamingLifecycleManager handleProtocolEndServiceACKMessage:testAudioMessage];
-                });
-
-                it(@"should have set all the right properties", ^{
-                    expect(streamingLifecycleManager.currentAudioStreamState).to(equal(SDLAudioStreamStateStopped));
-                });
-            });
-
-            describe(@"after receiving a audio end NAK", ^{
-                __block SDLProtocolHeader *testAudioHeader = nil;
-                __block SDLProtocolMessage *testAudioMessage = nil;
-
-                beforeEach(^{
-                    [streamingLifecycleManager.videoStreamStateMachine setToState:SDLAudioStreamStateStarting fromOldState:nil callEnterTransition:NO];
-
-                    testAudioHeader = [[SDLV2ProtocolHeader alloc] initWithVersion:5];
-                    testAudioHeader.frameType = SDLFrameTypeSingle;
-                    testAudioHeader.frameData = SDLFrameInfoEndServiceNACK;
-                    testAudioHeader.encrypted = NO;
-                    testAudioHeader.serviceType = SDLServiceTypeAudio;
-
-                    testAudioMessage = [[SDLV2ProtocolMessage alloc] initWithHeader:testAudioHeader andPayload:nil];
-                    [streamingLifecycleManager handleProtocolEndServiceNAKMessage:testAudioMessage];
-                });
-
-                it(@"should have set all the right properties", ^{
-                    expect(streamingLifecycleManager.currentAudioStreamState).to(equal(SDLAudioStreamStateStopped));
                 });
             });
         });

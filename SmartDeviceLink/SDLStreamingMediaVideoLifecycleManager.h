@@ -1,5 +1,5 @@
 //
-//  SDLStreamingMediaLifecycleManager.h
+//  SDLStreamingMediaVideoLifecycleManager.h
 //  SmartDeviceLink-iOS
 //
 //  Created by Muller, Alexander (A.) on 2/16/17.
@@ -12,11 +12,9 @@
 #import "SDLConnectionManagerType.h"
 #import "SDLHMILevel.h"
 #import "SDLProtocolListener.h"
-#import "SDLStreamingAudioManagerType.h"
 #import "SDLStreamingMediaManagerConstants.h"
 
 @class SDLAbstractProtocol;
-@class SDLAudioStreamManager;
 @class SDLCarWindow;
 @class SDLImageResolution;
 @class SDLStateMachine;
@@ -30,6 +28,7 @@
 NS_ASSUME_NONNULL_BEGIN
 
 typedef NSString SDLAppState;
+// defined in SDLStreamingMediaAudioLifecycleManager.m
 extern SDLAppState *const SDLAppStateInactive;
 extern SDLAppState *const SDLAppStateActive;
 
@@ -39,23 +38,15 @@ extern SDLVideoStreamState *const SDLVideoStreamStateStarting;
 extern SDLVideoStreamState *const SDLVideoStreamStateReady;
 extern SDLVideoStreamState *const SDLVideoStreamStateShuttingDown;
 
-typedef NSString SDLAudioStreamState;
-extern SDLAudioStreamState *const SDLAudioStreamStateStopped;
-extern SDLAudioStreamState *const SDLAudioStreamStateStarting;
-extern SDLAudioStreamState *const SDLAudioStreamStateReady;
-extern SDLAudioStreamState *const SDLAudioStreamStateShuttingDown;
-
 
 #pragma mark - Interface
 
-@interface SDLStreamingMediaLifecycleManager : NSObject <SDLProtocolListener, SDLStreamingAudioManagerType>
+@interface SDLStreamingMediaVideoLifecycleManager : NSObject <SDLProtocolListener>
 
 @property (strong, nonatomic, readonly) SDLStateMachine *appStateMachine;
 @property (strong, nonatomic, readonly) SDLStateMachine *videoStreamStateMachine;
-@property (strong, nonatomic, readonly) SDLStateMachine *audioStreamStateMachine;
 
 @property (strong, nonatomic, readonly) SDLAppState *currentAppState;
-@property (strong, nonatomic, readonly) SDLAudioStreamState *currentAudioStreamState;
 @property (strong, nonatomic, readonly) SDLVideoStreamState *currentVideoStreamState;
 
 @property (copy, nonatomic, nullable) SDLHMILevel hmiLevel;
@@ -67,7 +58,6 @@ extern SDLAudioStreamState *const SDLAudioStreamStateShuttingDown;
  */
 @property (nonatomic, strong, readonly) SDLTouchManager *touchManager;
 
-@property (nonatomic, strong, readonly) SDLAudioStreamManager *audioManager;
 @property (nonatomic, strong) UIViewController *rootViewController;
 @property (strong, nonatomic, readonly, nullable) SDLCarWindow *carWindow;
 
@@ -97,16 +87,6 @@ extern SDLAudioStreamState *const SDLAudioStreamStateShuttingDown;
  *  Whether or not the video session is encrypted. This may be different than the requestedEncryptionType.
  */
 @property (assign, nonatomic, readonly, getter=isVideoEncrypted) BOOL videoEncrypted;
-
-/**
- *  Whether or not the audio session is connected.
- */
-@property (assign, nonatomic, readonly, getter=isAudioConnected) BOOL audioConnected;
-
-/**
- *  Whether or not the audio session is encrypted. This may be different than the requestedEncryptionType.
- */
-@property (assign, nonatomic, readonly, getter=isAudioEncrypted) BOOL audioEncrypted;
 
 /**
  *  Whether or not the video stream is paused due to either the application being backgrounded, the HMI state being either NONE or BACKGROUND, or the video stream not being ready.
@@ -157,7 +137,7 @@ extern SDLAudioStreamState *const SDLAudioStreamStateShuttingDown;
 @property (assign, nonatomic, readonly, nullable) CVPixelBufferPoolRef pixelBufferPool;
 
 /**
- *  The requested encryption type when a session attempts to connect. This setting applies to both video and audio sessions.
+ *  The requested encryption type when a session attempts to connect.
  *
  *  DEFAULT: SDLStreamingEncryptionFlagAuthenticateAndEncrypt
  */
@@ -202,15 +182,6 @@ extern SDLAudioStreamState *const SDLAudioStreamStateShuttingDown;
  *  @return Whether or not the data was successfully encoded and sent.
  */
 - (BOOL)sendVideoData:(CVImageBufferRef)imageBuffer presentationTimestamp:(CMTime)presentationTimestamp;
-
-/**
- *  This method receives PCM audio data and will attempt to send that data across to the head unit for immediate playback
- *
- *  @param audioData    The data in PCM audio format, to be played
- *
- *  @return Whether or not the data was successfully sent.
- */
-- (BOOL)sendAudioData:(NSData *)audioData;
 
 
 @end
