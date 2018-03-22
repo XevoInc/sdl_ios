@@ -353,7 +353,7 @@ describe(@"the audio streaming media manager", ^{
                 __block SDLProtocolMessage *testAudioMessage = nil;
 
                 beforeEach(^{
-                    [streamingLifecycleManager.videoStreamStateMachine setToState:SDLAudioStreamStateStarting fromOldState:nil callEnterTransition:NO];
+                    [streamingLifecycleManager.audioStreamStateMachine setToState:SDLAudioStreamStateStarting fromOldState:nil callEnterTransition:NO];
 
                     testAudioHeader = [[SDLV2ProtocolHeader alloc] initWithVersion:5];
                     testAudioHeader.frameType = SDLFrameTypeSingle;
@@ -375,7 +375,7 @@ describe(@"the audio streaming media manager", ^{
                 __block SDLProtocolMessage *testAudioMessage = nil;
 
                 beforeEach(^{
-                    [streamingLifecycleManager.videoStreamStateMachine setToState:SDLAudioStreamStateStarting fromOldState:nil callEnterTransition:NO];
+                    [streamingLifecycleManager.audioStreamStateMachine setToState:SDLAudioStreamStateStarting fromOldState:nil callEnterTransition:NO];
 
                     testAudioHeader = [[SDLV2ProtocolHeader alloc] initWithVersion:5];
                     testAudioHeader.frameType = SDLFrameTypeSingle;
@@ -397,7 +397,7 @@ describe(@"the audio streaming media manager", ^{
                 __block SDLProtocolMessage *testAudioMessage = nil;
 
                 beforeEach(^{
-                    [streamingLifecycleManager.videoStreamStateMachine setToState:SDLAudioStreamStateStarting fromOldState:nil callEnterTransition:NO];
+                    [streamingLifecycleManager.audioStreamStateMachine setToState:SDLAudioStreamStateStarting fromOldState:nil callEnterTransition:NO];
 
                     testAudioHeader = [[SDLV2ProtocolHeader alloc] initWithVersion:5];
                     testAudioHeader.frameType = SDLFrameTypeSingle;
