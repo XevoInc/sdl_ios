@@ -48,6 +48,7 @@
 #import "SDLStateMachine.h"
 #import "SDLStreamingMediaConfiguration.h"
 #import "SDLStreamingMediaManager.h"
+#import "SDLStreamingProtocolListener.h"
 #import "SDLUnregisterAppInterface.h"
 
 
@@ -67,7 +68,7 @@ SDLLifecycleState *const SDLLifecycleStateReady = @"Ready";
 
 #pragma mark - SDLManager Private Interface
 
-@interface SDLLifecycleManager () <SDLConnectionManagerType>
+@interface SDLLifecycleManager () <SDLConnectionManagerType, SDLStreamingProtocolListener>
 
 // Readonly public properties
 @property (copy, nonatomic, readwrite) SDLConfiguration *configuration;
@@ -208,7 +209,8 @@ SDLLifecycleState *const SDLLifecycleStateReady = @"Ready";
 #pragma clang diagnostic pop
 
     if (self.streamManager != nil) {
-        [self.streamManager startWithProtocol:self.proxy.protocol];
+        [self onAudioServiceProtocolUpdated:nil to:self.proxy.protocol];
+        [self onVideoServiceProtocolUpdated:nil to:self.proxy.protocol];
     }
 }
 
@@ -226,7 +228,8 @@ SDLLifecycleState *const SDLLifecycleStateReady = @"Ready";
     [self.fileManager stop];
     [self.permissionManager stop];
     [self.lockScreenManager stop];
-    [self.streamManager stop];
+    [self onAudioServiceProtocolUpdated:self.proxy.protocol to:nil];
+    [self onVideoServiceProtocolUpdated:self.proxy.protocol to:nil];
     [self.responseDispatcher clear];
 
     [self.rpcOperationQueue cancelAllOperations];
@@ -650,6 +653,34 @@ SDLLifecycleState *const SDLLifecycleStateReady = @"Ready";
         return;
     } else {
         [self.lifecycleStateMachine transitionToState:SDLLifecycleStateReconnecting];
+    }
+}
+
+#pragma mark Streaming protocol listener
+
+- (void)onAudioServiceProtocolUpdated:(nullable SDLAbstractProtocol *)oldProtocol to:(nullable SDLAbstractProtocol *)newProtocol {
+    if ((oldProtocol == nil && newProtocol == nil) || (oldProtocol == newProtocol)) {
+        return;
+    }
+
+    if (oldProtocol != nil) {
+        [self.streamManager stopAudio];
+    }
+    if (newProtocol != nil) {
+        [self.streamManager startAudioWithProtocol:newProtocol];
+    }
+}
+
+- (void)onVideoServiceProtocolUpdated:(nullable SDLAbstractProtocol *)oldProtocol to:(nullable SDLAbstractProtocol *)newProtocol {
+    if ((oldProtocol == nil && newProtocol == nil) || (oldProtocol == newProtocol)) {
+        return;
+    }
+
+    if (oldProtocol != nil) {
+        [self.streamManager stopVideo];
+    }
+    if (newProtocol != nil) {
+        [self.streamManager startVideoWithProtocol:newProtocol];
     }
 }
 
