@@ -73,6 +73,7 @@ describe(@"a lifecycle manager", ^{
     beforeEach(^{
         OCMStub([proxyBuilderClassMock buildSDLProxyWithListener:[OCMArg any]]).andReturn(proxyMock);
         OCMStub([(SDLProxy*)proxyMock protocol]).andReturn(protocolMock);
+        OCMStub([proxyBuilderClassMock buildSDLProxyWithListener:[OCMArg any] secondaryTransportManager:[OCMArg any]]).andReturn(proxyMock);
         
         SDLLifecycleConfiguration *testLifecycleConfig = [SDLLifecycleConfiguration defaultConfigurationWithAppName:@"Test App" appId:@"Test Id"];
         testLifecycleConfig.shortAppName = @"Short Name";

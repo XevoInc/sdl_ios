@@ -43,6 +43,7 @@
 #import "SDLResponseDispatcher.h"
 #import "SDLResult.h"
 #import "SDLScreenManager.h"
+#import "SDLSecondaryTransportManager.h"
 #import "SDLSequentialRPCRequestOperation.h"
 #import "SDLSetAppIcon.h"
 #import "SDLStateMachine.h"
@@ -77,6 +78,7 @@ SDLLifecycleState *const SDLLifecycleStateReady = @"Ready";
 @property (strong, nonatomic, readwrite) SDLStateMachine *lifecycleStateMachine;
 
 // Private properties
+@property (strong, nonatomic, nullable) SDLSecondaryTransportManager *secondaryTransportManager;
 @property (copy, nonatomic) SDLManagerReadyBlock readyHandler;
 @property (copy, nonatomic) dispatch_queue_t lifecycleQueue;
 
@@ -203,14 +205,21 @@ SDLLifecycleState *const SDLLifecycleStateReady = @"Ready";
 #pragma clang diagnostic ignored "-Wdeprecated-declarations"
     if (self.configuration.lifecycleConfig.tcpDebugMode) {
         self.proxy = [SDLProxyFactory buildSDLProxyWithListener:self.notificationDispatcher tcpIPAddress:self.configuration.lifecycleConfig.tcpDebugIPAddress tcpPort:[@(self.configuration.lifecycleConfig.tcpDebugPort) stringValue]];
+        // secondary transport manager is not used
+        self.secondaryTransportManager = nil;
     } else {
-        self.proxy = [SDLProxyFactory buildSDLProxyWithListener:self.notificationDispatcher];
+        self.secondaryTransportManager = [[SDLSecondaryTransportManager alloc] initWithStreamingProtocolListener:self];
+        self.proxy = [SDLProxyFactory buildSDLProxyWithListener:self.notificationDispatcher secondaryTransportManager:self.secondaryTransportManager];
     }
 #pragma clang diagnostic pop
 
-    if (self.streamManager != nil) {
-        [self onAudioServiceProtocolUpdated:nil to:self.proxy.protocol];
-        [self onVideoServiceProtocolUpdated:nil to:self.proxy.protocol];
+    // if secondary transport manager is used, streaming media manager will be started through
+    // onAudioServiceProtocolUpdated and onVideoServiceProtocolUpdated
+    if (self.secondaryTransportManager == nil) {
+        if (self.streamManager != nil) {
+            [self onAudioServiceProtocolUpdated:nil to:self.proxy.protocol];
+            [self onVideoServiceProtocolUpdated:nil to:self.proxy.protocol];
+        }
     }
 }
 
@@ -228,8 +237,12 @@ SDLLifecycleState *const SDLLifecycleStateReady = @"Ready";
     [self.fileManager stop];
     [self.permissionManager stop];
     [self.lockScreenManager stop];
-    [self onAudioServiceProtocolUpdated:self.proxy.protocol to:nil];
-    [self onVideoServiceProtocolUpdated:self.proxy.protocol to:nil];
+    if (self.secondaryTransportManager != nil) {
+        [self.secondaryTransportManager stop];
+    } else {
+        [self onAudioServiceProtocolUpdated:self.proxy.protocol to:nil];
+        [self onVideoServiceProtocolUpdated:self.proxy.protocol to:nil];
+    }
     [self.responseDispatcher clear];
 
     [self.rpcOperationQueue cancelAllOperations];
