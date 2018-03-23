@@ -15,6 +15,7 @@ NS_ASSUME_NONNULL_BEGIN
 
 @property (strong, nonatomic) NSString *debugConsoleGroupName;
 @property (nullable, weak, nonatomic) SDLAbstractTransport *transport;
+// if you update protocolDelegateTable while the protocol is running, please make sure to guard with @synchronized
 @property (nullable, strong, nonatomic) NSHashTable<id<SDLProtocolListener>> *protocolDelegateTable;
 @property (nullable, nonatomic, strong) id<SDLSecurityType> securityManager;
 @property (nonatomic, copy) NSString *appId;

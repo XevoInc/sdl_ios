@@ -62,7 +62,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 #pragma mark - SDLTransportListener Implementation
 - (void)onTransportConnected {
-    for (id<SDLProtocolListener> listener in self.protocolDelegateTable.allObjects) {
+    NSArray<id<SDLProtocolListener>> *listeners;
+    @synchronized(self.protocolDelegateTable) {
+        listeners = self.protocolDelegateTable.allObjects;
+    }
+    for (id<SDLProtocolListener> listener in listeners) {
         if ([listener respondsToSelector:@selector(onProtocolOpened)]) {
             [listener onProtocolOpened];
         }
@@ -70,7 +74,11 @@ NS_ASSUME_NONNULL_BEGIN
 }
 
 - (void)onTransportDisconnected {
-    for (id<SDLProtocolListener> listener in self.protocolDelegateTable.allObjects) {
+    NSArray<id<SDLProtocolListener>> *listeners;
+    @synchronized(self.protocolDelegateTable) {
+        listeners = self.protocolDelegateTable.allObjects;
+    }
+    for (id<SDLProtocolListener> listener in listeners) {
         if ([listener respondsToSelector:@selector(onProtocolClosed)]) {
             [listener onProtocolClosed];
         }
