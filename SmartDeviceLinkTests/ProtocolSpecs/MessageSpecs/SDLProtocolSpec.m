@@ -11,6 +11,7 @@
 
 #import "SDLAbstractTransport.h"
 #import "SDLControlFramePayloadRegisterSecondaryTransportNak.h"
+#import "SDLGlobals.h"
 #import "SDLProtocolHeader.h"
 #import "SDLProtocol.h"
 #import "SDLProtocolMessage.h"
@@ -36,6 +37,10 @@ NSDictionary* dictionaryV2 = @{SDLNameCommandId:@55};
 describe(@"Send StartService Tests", ^ {
     context(@"Unsecure", ^{
         it(@"Should send the correct data", ^ {
+            // Reset max protocol version before test. (If other test ran prior to this one, SDLGlobals would
+            // keep the max protocol version and this test case would fail.)
+            [[SDLGlobals sharedGlobals] setMaxHeadUnitVersion:@"1.0.0"];
+
             SDLProtocol* testProtocol = [[SDLProtocol alloc] init];
             
             __block BOOL verified = NO;
@@ -59,6 +64,9 @@ describe(@"Send StartService Tests", ^ {
         });
 
         it(@"Should reuse stored header of RPC service when starting other service", ^{
+            // reset max protocol version before test
+            [[SDLGlobals sharedGlobals] setMaxHeadUnitVersion:@"2.0.0"];
+
             SDLServiceType serviceTypeToStart = SDLServiceTypeVideo;
 
             // reference header (which is taken from Start Service ACK of Version Negotiation)
