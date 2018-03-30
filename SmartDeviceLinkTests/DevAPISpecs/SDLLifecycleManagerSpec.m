@@ -55,6 +55,12 @@ QuickConfigurationBegin(SendingRPCsConfiguration)
 QuickConfigurationEnd
 
 
+@interface SDLLifecycleManager ()
+// reach the private property for testing
+@property (strong, nonatomic, nullable) SDLSecondaryTransportManager *secondaryTransportManager;
+@end
+
+
 QuickSpecBegin(SDLLifecycleManagerSpec)
 
 describe(@"a lifecycle manager", ^{
@@ -185,7 +191,13 @@ describe(@"a lifecycle manager", ^{
             expect(testManager.proxy).toNot(beNil());
             expect(testManager.lifecycleState).to(match(SDLLifecycleStateStarted));
         });
-        
+
+        it(@"should initialize secondary transport manager if not in tcpDebugMode", ^{
+            if (!testManager.configuration.lifecycleConfig.tcpDebugMode) {
+                expect(testManager.secondaryTransportManager).toNot(beNil());
+            }
+        });
+
         describe(@"after receiving a connect notification", ^{
             beforeEach(^{
                 // When we connect, we should be creating an sending an RAI
@@ -237,8 +249,10 @@ describe(@"a lifecycle manager", ^{
                     OCMStub([(SDLLockScreenManager *)lockScreenManagerMock start]);
                     OCMStub([fileManagerMock startWithCompletionHandler:([OCMArg invokeBlockWithArgs:@(YES), fileManagerStartError, nil])]);
                     OCMStub([permissionManagerMock startWithCompletionHandler:([OCMArg invokeBlockWithArgs:@(YES), permissionManagerStartError, nil])]);
-                    OCMStub([streamingManagerMock startWithProtocol:protocolMock]);
-                    
+                    if (testConfig.lifecycleConfig.tcpDebugMode) {
+                        OCMStub([streamingManagerMock startWithProtocol:protocolMock]);
+                    }
+
                     // Send an RAI response & make sure we have an HMI status to move the lifecycle forward
                     testManager.hmiLevel = SDLHMILevelFull;
                     [testManager.lifecycleStateMachine transitionToState:SDLLifecycleStateRegistered];
@@ -250,7 +264,9 @@ describe(@"a lifecycle manager", ^{
                     OCMVerify([(SDLLockScreenManager *)lockScreenManagerMock start]);
                     OCMVerify([fileManagerMock startWithCompletionHandler:[OCMArg any]]);
                     OCMVerify([permissionManagerMock startWithCompletionHandler:[OCMArg any]]);
-                    OCMVerify([streamingManagerMock startWithProtocol:[OCMArg any]]);
+                    if (testManager.configuration.lifecycleConfig.tcpDebugMode) {
+                        OCMVerify([streamingManagerMock startWithProtocol:[OCMArg any]]);
+                    }
                 });
                 
                 itBehavesLike(@"unable to send an RPC", ^{ return @{ @"manager": testManager }; });
