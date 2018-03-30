@@ -120,7 +120,7 @@ SDLAudioStreamState *const SDLAudioStreamStateShuttingDown = @"AudioStreamShutti
 }
 
 - (void)stop {
-    SDLLogD(@"Stopping manager");
+    SDLLogD(@"Stopping StreamingMediaAudioLifecycleManager");
     [self sdl_stopAudioSession];
 
     self.hmiLevel = SDLHMILevelNone;
@@ -176,14 +176,14 @@ SDLAudioStreamState *const SDLAudioStreamStateShuttingDown = @"AudioStreamShutti
 }
 
 - (void)didEnterStateAppInactive {
-    SDLLogD(@"App became inactive");
+    SDLLogD(@"App became inactive in StreamingMediaAudioLifecycleManager");
     if (!self.protocol) { return; }
 
     [self sdl_stopAudioSession];
 }
 
 - (void)didEnterStateAppActive {
-    SDLLogD(@"App became active");
+    SDLLogD(@"App became active in StreamingMediaAudioLifecycleManager");
     if (!self.protocol) { return; }
 
     [self sdl_startAudioSession];

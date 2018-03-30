@@ -167,7 +167,7 @@ typedef void(^SDLVideoCapabilityResponseHandler)(SDLVideoStreamingCapability *_N
 }
 
 - (void)stop {
-    SDLLogD(@"Stopping manager");
+    SDLLogD(@"Stopping StreamingMediaVideoLifecycleManager");
     [self sdl_stopVideoSession];
 
     self.restartVideoStream = NO;
@@ -250,7 +250,7 @@ typedef void(^SDLVideoCapabilityResponseHandler)(SDLVideoStreamingCapability *_N
 }
 
 - (void)didEnterStateAppInactive {
-    SDLLogD(@"App became inactive");
+    SDLLogD(@"App became inactive in StreamingMediaVideoLifecycleManager");
     if (!self.protocol) { return; }
 
     [self sdl_sendBackgroundFrames];
@@ -262,7 +262,7 @@ typedef void(^SDLVideoCapabilityResponseHandler)(SDLVideoStreamingCapability *_N
 // Per Apple's guidelines: https://developer.apple.com/library/content/documentation/iPhone/Conceptual/iPhoneOSProgrammingGuide/StrategiesforHandlingAppStateTransitions/StrategiesforHandlingAppStateTransitions.html
 // We should be waiting to start any OpenGL drawing until UIApplicationDidBecomeActive is called.
 - (void)didEnterStateAppActive {
-    SDLLogD(@"App became active");
+    SDLLogD(@"App became active in StreamingMediaVideoLifecycleManager");
     if (!self.protocol) { return; }
 
     [self sdl_startVideoSession];
