@@ -175,8 +175,6 @@ typedef void(^SDLVideoCapabilityResponseHandler)(SDLVideoStreamingCapability *_N
 
     self.restartVideoStream = NO;
 
-    self.hmiLevel = SDLHMILevelNone;
-
     [self.videoStreamStateMachine transitionToState:SDLVideoStreamStateStopped];
 
     self.protocol = nil;

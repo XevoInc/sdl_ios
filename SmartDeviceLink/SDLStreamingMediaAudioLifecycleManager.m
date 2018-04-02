@@ -126,8 +126,6 @@ SDLAudioStreamState *const SDLAudioStreamStateShuttingDown = @"AudioStreamShutti
     SDLLogD(@"Stopping StreamingMediaAudioLifecycleManager");
     [self sdl_stopAudioSession];
 
-    self.hmiLevel = SDLHMILevelNone;
-
     [self.audioStreamStateMachine transitionToState:SDLAudioStreamStateStopped];
 
     self.protocol = nil;
