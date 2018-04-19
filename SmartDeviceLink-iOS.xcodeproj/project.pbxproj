@@ -798,8 +798,7 @@
 		5D61FDC21A84238C00846EE7 /* SDLSystemRequestResponse.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D61FBD51A84238B00846EE7 /* SDLSystemRequestResponse.m */; };
 		5D61FDC31A84238C00846EE7 /* SDLTBTState.h in Headers */ = {isa = PBXBuildFile; fileRef = 5D61FBD61A84238B00846EE7 /* SDLTBTState.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5D61FDC41A84238C00846EE7 /* SDLTBTState.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D61FBD71A84238B00846EE7 /* SDLTBTState.m */; };
-		5D61FDC51A84238C00846EE7 /* SDLTCPTransport.h in Headers */ = {isa = PBXBuildFile; fileRef = 5D61FBD81A84238B00846EE7 /* SDLTCPTransport.h */; settings = {ATTRIBUTES = (Public, ); }; };
-		5D61FDC61A84238C00846EE7 /* SDLTCPTransport.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D61FBD91A84238B00846EE7 /* SDLTCPTransport.m */; };
+		5D61FDC61A84238C00846EE7 /* SDLTCPLegacyTransport.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D61FBD91A84238B00846EE7 /* SDLTCPLegacyTransport.m */; };
 		5D61FDC71A84238C00846EE7 /* SDLTextAlignment.h in Headers */ = {isa = PBXBuildFile; fileRef = 5D61FBDA1A84238B00846EE7 /* SDLTextAlignment.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		5D61FDC81A84238C00846EE7 /* SDLTextAlignment.m in Sources */ = {isa = PBXBuildFile; fileRef = 5D61FBDB1A84238C00846EE7 /* SDLTextAlignment.m */; };
 		5D61FDC91A84238C00846EE7 /* SDLTextField.h in Headers */ = {isa = PBXBuildFile; fileRef = 5D61FBDC1A84238C00846EE7 /* SDLTextField.h */; settings = {ATTRIBUTES = (Public, ); }; };
@@ -1176,6 +1175,11 @@
 		EE798CAA20561225008EDE8E /* SDLSecondaryTransportManagerConstants.m in Sources */ = {isa = PBXBuildFile; fileRef = EE798CA920561225008EDE8E /* SDLSecondaryTransportManagerConstants.m */; };
 		EE7B6123205BF6C800E0655B /* SDLControlFramePayloadRegisterSecondaryTransportNak.m in Sources */ = {isa = PBXBuildFile; fileRef = EE7B6122205BF6C800E0655B /* SDLControlFramePayloadRegisterSecondaryTransportNak.m */; };
 		EE7B6124205BF97B00E0655B /* SDLControlFramePayloadRegisterSecondaryTransportNak.h in Headers */ = {isa = PBXBuildFile; fileRef = EE7B6121205BF69C00E0655B /* SDLControlFramePayloadRegisterSecondaryTransportNak.h */; };
+		EE7B6D2C208848C8006A4E01 /* SDLTCPTransport.m in Sources */ = {isa = PBXBuildFile; fileRef = EE7B6D2B208848C8006A4E01 /* SDLTCPTransport.m */; };
+		EE7B6D2F20884C42006A4E01 /* SDLTCPAbstractTransport.m in Sources */ = {isa = PBXBuildFile; fileRef = EE7B6D2E20884C42006A4E01 /* SDLTCPAbstractTransport.m */; };
+		EE7B6D3020884F30006A4E01 /* SDLTCPTransport.h in Headers */ = {isa = PBXBuildFile; fileRef = EE7B6D2A208848AE006A4E01 /* SDLTCPTransport.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		EE7B6D3120884F39006A4E01 /* SDLTCPAbstractTransport.h in Headers */ = {isa = PBXBuildFile; fileRef = EE7B6D2D20884A8C006A4E01 /* SDLTCPAbstractTransport.h */; };
+		EE7B6D3220884F3F006A4E01 /* SDLTCPLegacyTransport.h in Headers */ = {isa = PBXBuildFile; fileRef = 5D61FBD81A84238B00846EE7 /* SDLTCPLegacyTransport.h */; };
 		EE976009206389EC00768CEB /* SDLStreamingMediaAudioLifecycleManager.h in Headers */ = {isa = PBXBuildFile; fileRef = EE976008206389EC00768CEB /* SDLStreamingMediaAudioLifecycleManager.h */; };
 		EE97600B206389F600768CEB /* SDLStreamingMediaAudioLifecycleManager.m in Sources */ = {isa = PBXBuildFile; fileRef = EE97600A206389F600768CEB /* SDLStreamingMediaAudioLifecycleManager.m */; };
 		EE97600D20638A8A00768CEB /* SDLStreamingMediaAudioLifecycleManagerSpec.m in Sources */ = {isa = PBXBuildFile; fileRef = EE97600C20638A8A00768CEB /* SDLStreamingMediaAudioLifecycleManagerSpec.m */; };
@@ -2073,8 +2077,8 @@
 		5D61FBD51A84238B00846EE7 /* SDLSystemRequestResponse.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDLSystemRequestResponse.m; sourceTree = "<group>"; };
 		5D61FBD61A84238B00846EE7 /* SDLTBTState.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDLTBTState.h; sourceTree = "<group>"; };
 		5D61FBD71A84238B00846EE7 /* SDLTBTState.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDLTBTState.m; sourceTree = "<group>"; };
-		5D61FBD81A84238B00846EE7 /* SDLTCPTransport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDLTCPTransport.h; sourceTree = "<group>"; };
-		5D61FBD91A84238B00846EE7 /* SDLTCPTransport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDLTCPTransport.m; sourceTree = "<group>"; };
+		5D61FBD81A84238B00846EE7 /* SDLTCPLegacyTransport.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDLTCPLegacyTransport.h; sourceTree = "<group>"; };
+		5D61FBD91A84238B00846EE7 /* SDLTCPLegacyTransport.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDLTCPLegacyTransport.m; sourceTree = "<group>"; };
 		5D61FBDA1A84238B00846EE7 /* SDLTextAlignment.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDLTextAlignment.h; sourceTree = "<group>"; };
 		5D61FBDB1A84238C00846EE7 /* SDLTextAlignment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDLTextAlignment.m; sourceTree = "<group>"; };
 		5D61FBDC1A84238C00846EE7 /* SDLTextField.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDLTextField.h; sourceTree = "<group>"; };
@@ -2462,6 +2466,10 @@
 		EE798CA920561225008EDE8E /* SDLSecondaryTransportManagerConstants.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDLSecondaryTransportManagerConstants.m; sourceTree = "<group>"; };
 		EE7B6121205BF69C00E0655B /* SDLControlFramePayloadRegisterSecondaryTransportNak.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDLControlFramePayloadRegisterSecondaryTransportNak.h; sourceTree = "<group>"; };
 		EE7B6122205BF6C800E0655B /* SDLControlFramePayloadRegisterSecondaryTransportNak.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SDLControlFramePayloadRegisterSecondaryTransportNak.m; sourceTree = "<group>"; };
+		EE7B6D2A208848AE006A4E01 /* SDLTCPTransport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDLTCPTransport.h; sourceTree = "<group>"; };
+		EE7B6D2B208848C8006A4E01 /* SDLTCPTransport.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SDLTCPTransport.m; sourceTree = "<group>"; };
+		EE7B6D2D20884A8C006A4E01 /* SDLTCPAbstractTransport.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = SDLTCPAbstractTransport.h; sourceTree = "<group>"; };
+		EE7B6D2E20884C42006A4E01 /* SDLTCPAbstractTransport.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = SDLTCPAbstractTransport.m; sourceTree = "<group>"; };
 		EE976008206389EC00768CEB /* SDLStreamingMediaAudioLifecycleManager.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = SDLStreamingMediaAudioLifecycleManager.h; sourceTree = "<group>"; };
 		EE97600A206389F600768CEB /* SDLStreamingMediaAudioLifecycleManager.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDLStreamingMediaAudioLifecycleManager.m; sourceTree = "<group>"; };
 		EE97600C20638A8A00768CEB /* SDLStreamingMediaAudioLifecycleManagerSpec.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = SDLStreamingMediaAudioLifecycleManagerSpec.m; sourceTree = "<group>"; };
@@ -3312,8 +3320,12 @@
 				5D61FADB1A84238A00846EE7 /* SDLIAPTransport.m */,
 				E9C32B8C1AB20BA200F283AF /* SDLStreamDelegate.h */,
 				E9C32B8D1AB20BA200F283AF /* SDLStreamDelegate.m */,
-				5D61FBD81A84238B00846EE7 /* SDLTCPTransport.h */,
-				5D61FBD91A84238B00846EE7 /* SDLTCPTransport.m */,
+				EE7B6D2A208848AE006A4E01 /* SDLTCPTransport.h */,
+				EE7B6D2B208848C8006A4E01 /* SDLTCPTransport.m */,
+				EE7B6D2D20884A8C006A4E01 /* SDLTCPAbstractTransport.h */,
+				EE7B6D2E20884C42006A4E01 /* SDLTCPAbstractTransport.m */,
+				5D61FBD81A84238B00846EE7 /* SDLTCPLegacyTransport.h */,
+				5D61FBD91A84238B00846EE7 /* SDLTCPLegacyTransport.m */,
 			);
 			name = Transport;
 			sourceTree = "<group>";
@@ -4894,7 +4906,6 @@
 				5DCD7AF31FCCA8E400A0FC7F /* SDLScreenshotViewController.h in Headers */,
 				5DD67CC71E68B568009CD394 /* SDLLogMacros.h in Headers */,
 				5D61FCFF1A84238C00846EE7 /* SDLOnAppInterfaceUnregistered.h in Headers */,
-				5D61FDC51A84238C00846EE7 /* SDLTCPTransport.h in Headers */,
 				5D6CC8EF1C610E660027F60A /* SDLSecurityType.h in Headers */,
 				5D61FCF61A84238C00846EE7 /* SDLMediaClockFormat.h in Headers */,
 				5D61FD831A84238C00846EE7 /* SDLSetDisplayLayout.h in Headers */,
@@ -4987,6 +4998,7 @@
 				5D61FC4F1A84238C00846EE7 /* SDLBodyInformation.h in Headers */,
 				5D61FDAB1A84238C00846EE7 /* SDLStartTime.h in Headers */,
 				5D61FD071A84238C00846EE7 /* SDLOnCommand.h in Headers */,
+				EE7B6D3220884F3F006A4E01 /* SDLTCPLegacyTransport.h in Headers */,
 				5D00AC671F140F0A004000D9 /* SDLSystemCapabilityType.h in Headers */,
 				DA9F7E9B1DCC052C00ACAE48 /* SDLLocationDetails.h in Headers */,
 				5D61FD1D1A84238C00846EE7 /* SDLOnTBTClientState.h in Headers */,
@@ -5077,6 +5089,7 @@
 				5D61FD651A84238C00846EE7 /* SDLResetGlobalPropertiesResponse.h in Headers */,
 				DA9F7E671DCBFAD400ACAE48 /* SDLOasisAddress.h in Headers */,
 				5D61FD611A84238C00846EE7 /* SDLRequestType.h in Headers */,
+				EE7B6D3120884F39006A4E01 /* SDLTCPAbstractTransport.h in Headers */,
 				DA9F7E8B1DCC04B000ACAE48 /* SDLSubscribeWayPointsResponse.h in Headers */,
 				5D61FCEC1A84238C00846EE7 /* SDLListFiles.h in Headers */,
 				5D2F58081D0717D5001085CE /* SDLManagerDelegate.h in Headers */,
@@ -5145,6 +5158,7 @@
 				5D6F7A351BC5B9B60070BF37 /* SDLLockScreenViewController.h in Headers */,
 				DA9F7E7F1DCC028B00ACAE48 /* SDLOnWayPointChange.h in Headers */,
 				5D61FCE41A84238C00846EE7 /* SDLKeyboardProperties.h in Headers */,
+				EE7B6D3020884F30006A4E01 /* SDLTCPTransport.h in Headers */,
 				5D61FDED1A84238C00846EE7 /* SDLUnsubscribeVehicleDataResponse.h in Headers */,
 				5D4631041F2120A30092EFDC /* SDLControlFramePayloadType.h in Headers */,
 				EED5CA061F4D1E2300F04000 /* SDLRTPH264Packetizer.h in Headers */,
@@ -5615,6 +5629,7 @@
 				5DBF06281E64A91D00A5CF03 /* SDLLogFileModule.m in Sources */,
 				5D6F7A361BC5B9B60070BF37 /* SDLLockScreenViewController.m in Sources */,
 				5D61FDE81A84238C00846EE7 /* SDLUnsubscribeButton.m in Sources */,
+				EE7B6D2F20884C42006A4E01 /* SDLTCPAbstractTransport.m in Sources */,
 				5D61FCF71A84238C00846EE7 /* SDLMediaClockFormat.m in Sources */,
 				5D61FD8A1A84238C00846EE7 /* SDLSetGlobalPropertiesResponse.m in Sources */,
 				5D61FC4C1A84238C00846EE7 /* SDLBeltStatus.m in Sources */,
@@ -5666,6 +5681,7 @@
 				5D61FC951A84238C00846EE7 /* SDLDriverDistractionState.m in Sources */,
 				5DB996611F28C6ED002D8795 /* SDLControlFramePayloadVideoStartServiceAck.m in Sources */,
 				5D61FD961A84238C00846EE7 /* SDLShowResponse.m in Sources */,
+				EE7B6D2C208848C8006A4E01 /* SDLTCPTransport.m in Sources */,
 				5D61FD981A84238C00846EE7 /* SDLSingleTireStatus.m in Sources */,
 				5D9FDA931F2A7D3400A495C8 /* bson_util.c in Sources */,
 				5D61FD511A84238C00846EE7 /* SDLProxy.m in Sources */,
@@ -5833,7 +5849,7 @@
 				5D61FCA11A84238C00846EE7 /* SDLEncodedSyncPDataResponse.m in Sources */,
 				5DD67CC41E68AE82009CD394 /* SDLLogFileModuleMap.m in Sources */,
 				5D61FD401A84238C00846EE7 /* SDLPrioritizedObjectCollection.m in Sources */,
-				5D61FDC61A84238C00846EE7 /* SDLTCPTransport.m in Sources */,
+				5D61FDC61A84238C00846EE7 /* SDLTCPLegacyTransport.m in Sources */,
 				5D61FE0E1A84238C00846EE7 /* SDLVrCapabilities.m in Sources */,
 				5DAD5F80204DEDEB0025624C /* SDLScreenManager.m in Sources */,
 				5D61FDC21A84238C00846EE7 /* SDLSystemRequestResponse.m in Sources */,
