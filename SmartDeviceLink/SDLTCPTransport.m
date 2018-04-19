@@ -7,6 +7,7 @@
 //
 
 #import "SDLTCPTransport.h"
+#import "SDLTCPStreamTaskTransport.h"
 #import "SDLTCPLegacyTransport.h"
 #import "SDLLogMacros.h"
 #import "SDLLogManager.h"
@@ -21,7 +22,11 @@ NS_ASSUME_NONNULL_BEGIN
 
 - (instancetype)init {
     if (self = [super init]) {
-        _transport = [[SDLTCPLegacyTransport alloc] initWithParent:self];
+        if ([SDLTCPStreamTaskTransport isAvailable]) {
+            _transport = [[SDLTCPStreamTaskTransport alloc] initWithParent:self];
+        } else {
+            _transport = [[SDLTCPLegacyTransport alloc] initWithParent:self];
+        }
     }
     return self;
 }
